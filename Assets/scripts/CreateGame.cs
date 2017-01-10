@@ -1,26 +1,31 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Tile {
 	public GameObject tileObj;
 	public string type;
-	public Tile(GameObject obj, string til){
+	public Tile(GameObject obj, string tile){
 		tileObj = obj;
-		type = til;
+		type = tile;
 	}
 }
+
 
 public class CreateGame : MonoBehaviour {
 
 	GameObject tile1 = null;
 	GameObject tile2 = null;
 
+	public static int remainingTurns = 40;
+	public static int score = 0;  
+
 	public GameObject[] tile;
 	List<GameObject> tileBank = new List<GameObject>();
 
-	static int rows = 9;
-	static int cols = 9;
+	static int rows = 5;
+	static int cols = 5;
 	bool renewBoard = false;
 
 	Tile[,] tiles = new Tile[cols, rows];
@@ -61,7 +66,7 @@ public class CreateGame : MonoBehaviour {
 		for (int rowNum = 0; rowNum < rows; rowNum++)
 		{
 			for (int colNum = 0; colNum < cols; colNum++)
-		{
+			{
 			Vector3 tilePos = new Vector3(colNum, rowNum, 0);
 			
 			for (int gemsNum = 0; gemsNum < tileBank.Count; gemsNum++)
@@ -97,6 +102,9 @@ public class CreateGame : MonoBehaviour {
 			{
 				tile1 = hit.collider.gameObject;
 			}
+
+			CreateGame.remainingTurns -= 1;
+
 		}
 		else if (Input.GetMouseButtonUp(0) && tile1)
 		{
@@ -113,7 +121,10 @@ public class CreateGame : MonoBehaviour {
 				int horzDist = (int)Mathf.Abs(tile1.transform.position.x - tile2.transform.position.x);
 				int vertDist = (int)Mathf.Abs(tile1.transform.position.y - tile2.transform.position.y);
 
-				if (horzDist == 1 ^ vertDist == 1)
+				Debug.Log ("horzDist: " + horzDist);
+				Debug.Log ("vertDist: " + vertDist);
+
+				if ((horzDist == 1 && vertDist == 0) || (horzDist == 0 && vertDist == 1))
 				{
 				Tile temp = tiles [(int)tile1.transform.position.x, (int)tile1.transform.position.y];
 				tiles [(int)tile1.transform.position.x, (int)tile1.transform.position.y] = tiles [(int)tile2.transform.position.x, (int)tile2.transform.position.y];
@@ -166,6 +177,8 @@ public class CreateGame : MonoBehaviour {
 						tiles[colNum-2, rowNum] = null;
 
 						renewBoard = true;
+
+						CreateGame.score += 1;
 					}
 				}
 			}
@@ -197,6 +210,8 @@ public class CreateGame : MonoBehaviour {
 						tiles[colNum, rowNum-2] = null;
 
 						renewBoard = true;
+
+						CreateGame.score += 1;
 					}
 				}
 			}
@@ -216,7 +231,7 @@ public class CreateGame : MonoBehaviour {
 
 		for (int rowNum = 1; rowNum < rows; rowNum++)
 		{
-			for (int colNum = 1; colNum < cols; colNum++)
+			for (int colNum = 0; colNum < cols; colNum++)
 			{
 				if (rowNum == rows-1 && tiles[colNum, rowNum] == null)
 				{
@@ -256,6 +271,6 @@ public class CreateGame : MonoBehaviour {
 		}
 	}
 
-
+	  
 }
 
