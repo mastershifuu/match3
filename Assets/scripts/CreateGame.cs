@@ -83,7 +83,7 @@ public class CreateGame : MonoBehaviour {
 			}
 		}
 		}
-
+		CheckGrid();
 
 
 	}
@@ -91,8 +91,6 @@ public class CreateGame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		CheckGrid();
-
 		if (Input.GetMouseButtonDown(0))
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -121,8 +119,8 @@ public class CreateGame : MonoBehaviour {
 				int horzDist = (int)Mathf.Abs(tile1.transform.position.x - tile2.transform.position.x);
 				int vertDist = (int)Mathf.Abs(tile1.transform.position.y - tile2.transform.position.y);
 
-				Debug.Log ("horzDist: " + horzDist);
-				Debug.Log ("vertDist: " + vertDist);
+				//Debug.Log ("horzDist: " + horzDist);
+				//Debug.Log ("vertDist: " + vertDist);
 
 				if ((horzDist == 1 && vertDist == 0) || (horzDist == 0 && vertDist == 1))
 				{
@@ -136,6 +134,8 @@ public class CreateGame : MonoBehaviour {
 
 				tile1 = null;
 				tile2 = null;
+
+				CheckGrid();
 				}
 				else
 				{
@@ -144,6 +144,7 @@ public class CreateGame : MonoBehaviour {
 
 				
 			}
+			
 
 		}
 	}
