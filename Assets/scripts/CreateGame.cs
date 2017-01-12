@@ -145,8 +145,8 @@ public class CreateGame : MonoBehaviour
 		for (int rowNum = 0; rowNum < rows; rowNum++) {
 			counter = 1;
 			for (int colNum = 1; colNum < cols; colNum++) {
-				if (tiles [colNum, rowNum] != null && tiles [colNum - 1, rowNum] != null)
- {				// if tiles exist
+				if (tiles [colNum, rowNum] != null && tiles [colNum - 1, rowNum] != null){
+					// if tiles exist
 					if (tiles [colNum, rowNum].type == tiles [colNum - 1, rowNum].type) {
 						counter++;
 						if (colNum == (rows - 1) && counter >= 3) { 
@@ -162,36 +162,26 @@ public class CreateGame : MonoBehaviour
 				}
 			}
 		}
-
 		//check in rows
-		for (int colNum = 0; colNum < rows; colNum++) {
-			counter = 1;
-			for (int rowNum = 1; rowNum < cols; rowNum++) {
-				if (tiles [colNum, rowNum] != null && tiles [colNum, rowNum - 1] != null)
- {				// if tiles exist
-					if (tiles [colNum, rowNum].type == tiles [colNum, rowNum - 1].type) {
-						counter++;
-					} else
-						counter = 1; // reser counter
-					//if three found remove
-					if (counter == 3) {
-						if (tiles [colNum, rowNum] != null)
-							tiles [colNum, rowNum].tileObj.SetActive (false);
-						if (tiles [colNum, rowNum - 1] != null)
-							tiles [colNum, rowNum - 1].tileObj.SetActive (false);
-						if (tiles [colNum, rowNum - 2] != null)
-							tiles [colNum, rowNum - 2].tileObj.SetActive (false);
-
-						tiles [colNum, rowNum] = null;
-						tiles [colNum, rowNum - 1] = null;
-						tiles [colNum, rowNum - 2] = null;
-
-						renewBoard = true;
-
-						CreateGame.score += 1;
+		for (int colNum = 0; colNum < rows; colNum++) { 
+			counter = 1; 
+			for (int rowNum = 1; rowNum < cols; rowNum++) { 
+				if (tiles [colNum, rowNum] != null && tiles [colNum, rowNum - 1] != null){ 
+					// if tiles exist 
+					if (tiles [colNum, rowNum].type == tiles [colNum, rowNum - 1].type) { 
+						counter++; 
+						if (rowNum == (cols - 1) && counter >= 3) { 
+							markCol (colNum, rowNum + 1, counter);
 					}
-				}
-			}
+						} else { 
+							if (counter >= 3) { 
+								markCol (colNum, rowNum, counter); 
+							} 
+							counter = 1; // reset counter 
+						} 
+					 
+				} 
+			} 
 		}
 
 		if (renewBoard) {
@@ -253,6 +243,17 @@ public class CreateGame : MonoBehaviour
 		CreateGame.score += 1;			
 	}
 
+	private void markCol (int colNum, int startRow, int count) 
+	{ 
+		for (int i = 1; i <= count; i++) { 
+			if (tiles [colNum, startRow - i] != null) 
+				tiles [colNum, startRow - i].tileObj.SetActive (false); 
+			tiles [colNum, startRow - i] = null; 
+		} 
+		Debug.Log ("counterCol: " + count); 
+		renewBoard = true; 
+		CreateGame.score += 1; 
+	}
 
 }
 
